@@ -1,6 +1,7 @@
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { useContext } from "react";
 import { LivrariaContext } from "../context/LivrariaContext";
+import { formatMoeda } from "../utils/utils";
 
 export default function Item({livro}: any) {
     const livrariaContext  = useContext(LivrariaContext);
@@ -22,7 +23,7 @@ export default function Item({livro}: any) {
                     <strong>Quantidade: </strong> {livro.quantidade}
                     </Card.Subtitle>
                     <Card.Subtitle className="mb-2">
-                    <strong>Total: </strong> {livro.total}
+                    <strong>Total: </strong> {formatMoeda(livro.total)}
                     </Card.Subtitle>
                     <Button variant="danger" onClick={() => livrariaContext?.hanbleRemoverLivroCarrinho(livro.id)} size='sm' className=''>Remover</Button>
                     

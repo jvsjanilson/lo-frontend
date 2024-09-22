@@ -7,30 +7,54 @@ import { ItemInterface } from '../../interfaces/ItemInterface';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { LivrariaContext } from '../../context/LivrariaContext';
 import Item from '../../components/Item';
+import Paginacao from '../../components/Paginacao';
 
 
 export default function Home() {
     const [livros, setLivros] = useState<LivroInterface[]>([]);
+    const [next, setNext] = useState<string | null>(null)
+    const [previous, setPrevious] = useState<string | null>(null)
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [search, setSearch] = useState('');
 
     const livrariaContext = useContext(LivrariaContext);
-
-    useEffect(() => {
-        async function fetchData() {
-            const response = await livroService.getLivros();
-            console.log(response.results);
+    
+    async function fetchData(page: string | null = null) {
+        livroService.getLivros(search, page).then(response => {
+            changePage(response, page);
             setLivros(response.results);
-        }
+        });
+    }
+    useEffect(() => {
 
         fetchData();
-        console.log(livrariaContext)
-    }, []);
+        
+    }, [search]);
+
+    const changePage = (response: any, page: string | null = null) => {
+        setNext(response?.next?.split('?')[1]);
+        setPrevious(response?.previous?.split('?')[1]);
+        if (!response?.previous?.split('?')[1]) {
+            if (response?.previous) {
+                setPrevious('page=1');
+            }
+        }
+        setCurrentPage(page?.includes('page=') ? parseInt(page.split('page=')[1]) : 1);
+    }
+
+    const handlePageChange = (page: string | null = null) => {
+        fetchData(page)
+    }
+
 
     return (
         <Layout>
             <Container fluid>
                 <Row className='my-4' >
                     <Col md={8}>
-                        <input type="search"  className="form-control" placeholder="Pesquisar" />
+                        <input type="search" className="form-control" placeholder="Pesquisar" 
+                            value={search} onChange={(e) => setSearch(e.target.value)}
+                        />
                     </Col>
                 </Row>
 
@@ -70,6 +94,7 @@ export default function Home() {
                         </Col>
                     )}
                 </Row>
+                <Paginacao next={next} previous={previous} currentPage={currentPage}  handlePageChange={handlePageChange} />
             </Container>
         </Layout>
     );

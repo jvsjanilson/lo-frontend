@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { LivrariaContext } from '../context/LivrariaContext';
 import { Link } from 'react-router-dom';
+import { formatDate, formatMoeda } from '../utils/utils';
 
 export default function Livro({livro}: any) {
     const context  = useContext(LivrariaContext);
@@ -16,19 +17,22 @@ export default function Livro({livro}: any) {
                     <Card.Body className='ps-2 '
                     >
                         <Card.Title>{livro.titulo}</Card.Title>
-                        <Card.Subtitle className='mb-1'>
+                        <Card.Subtitle className='mb-2'>
                            <strong>Autor: </strong> {livro.autor}
                         </Card.Subtitle >
-                        <Card.Subtitle className="mb-1">
+                        <Card.Subtitle className="mb-2">
                            <strong>Categoria: </strong> {livro.categoria}
                         </Card.Subtitle>
-                        <Card.Subtitle className="mb-1">
-                           <strong>Data Publicação: </strong> {livro.data_publicacao}
+                        <Card.Subtitle className="mb-2">
+                           <strong>Data Publicação: </strong> {formatDate(livro.data_publicacao)}
+                        </Card.Subtitle>
+                        <Card.Subtitle className="mb-2">
+                            <strong>Preço: </strong> {formatMoeda(livro.preco)}
                         </Card.Subtitle>
 
                   
                         <div className='d-flex justify-content-between align-self-end'>
-                            <Link
+                            <Link className='btn btn-success btn-sm'
                                 to="/livro/detalhe"
                                 state={{ livro }}>
                             Ver detalhes do livro

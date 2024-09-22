@@ -1,5 +1,6 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
+import { formatDate, formatMoeda} from "../../utils/utils";
 
 export default function Detalhe() {
     const location = useLocation();
@@ -29,7 +30,7 @@ export default function Detalhe() {
                                 <strong>Categoria: </strong>{livro.categoria}
                             </Card.Text>
                             <Card.Text>
-                                <strong>Data Publicação: </strong>{livro.data_publicacao}
+                                <strong>Data Publicação: </strong>{formatDate(livro.data_publicacao)}
                             </Card.Text>
 
 
