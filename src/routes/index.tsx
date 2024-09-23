@@ -4,7 +4,7 @@ import { LivrariaProvider } from "../context/LivrariaContext";
 import Home from "../pages/home";
 import Detalhe from "../pages/livro/detalhe";
 import Login from "../pages/login";
-
+import Register from "../pages/register"
 
 export default function Rotas() {
     return (
@@ -14,6 +14,7 @@ export default function Rotas() {
                     <Route path="/" element={<Home/>} />
                     <Route path="/livro/detalhe" element={<Detalhe/>} />
                     <Route path="/login" element={<Login/>} />
+                    <Route path="/register" element={<Register/>} />
                 </Routes>
             </LivrariaProvider>
         </Router>
