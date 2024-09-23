@@ -8,7 +8,7 @@ import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { LivrariaContext } from '../../context/LivrariaContext';
 import Item from '../../components/Item';
 import Paginacao from '../../components/Paginacao';
-
+import { formatMoeda } from '../../utils/utils';
 
 export default function Home() {
     const [livros, setLivros] = useState<LivroInterface[]>([]);
@@ -18,6 +18,7 @@ export default function Home() {
     const [search, setSearch] = useState('');
 
     const livrariaContext = useContext(LivrariaContext);
+    
     
     async function fetchData(page: string | null = null) {
         livroService.getLivros(search, page).then(response => {
@@ -56,31 +57,33 @@ export default function Home() {
                             value={search} onChange={(e) => setSearch(e.target.value)}
                         />
                     </Col>
+                    
                 </Row>
-
                 <Row className='g-2'>
                     <Col md>
                         {livros.map(livro => (
                             <Livro key={livro.id} livro={livro}  />
                         ))}
-                    
+                    <Paginacao next={next} previous={previous} currentPage={currentPage}  handlePageChange={handlePageChange} />
                     </Col>
                     {livrariaContext?.showCarrinho && (
                         <Col md={4}>
                             <Card className='mb-2 shadow-sm'  >
                             <Card.Header>
                                 <div className='d-flex justify-content-between align-items-center'>
-                                    <div>
-                                        Carrinho ({livrariaContext?.carrinho.length})
+                                    <div> 
+                                        <strong>
+                                            Carrinho ({livrariaContext?.carrinho.length}) -  Total: R$  { formatMoeda(livrariaContext?.carrinho.reduce((acc, item) => acc + (item.preco * item.quantidade), 0))}
+                                        </strong>
                                     </div>
                                     <div>
-                                    {livrariaContext.carrinho.length > 0 && (
-                                        <Button variant="success" size='sm' className=''>Finalizar Compra</Button>
+                                    {(livrariaContext.carrinho.length > 0 && livrariaContext?.isLogin) &&    (
+                                        <Button variant="success" onClick={() => {}} size='sm' className=''>Finalizar Compra </Button>
                                     )}
                                     </div>
                                 </div>
                             </Card.Header>
-                                <Card.Body className='p-1'>
+                                <Card.Body className='p-1' style={{ maxHeight: '34.38rem', overflowY: 'auto' }}>
                                     
                                     <Card.Text>
                                         {livrariaContext?.carrinho &&  livrariaContext.carrinho.map((item: ItemInterface) => (
@@ -94,7 +97,7 @@ export default function Home() {
                         </Col>
                     )}
                 </Row>
-                <Paginacao next={next} previous={previous} currentPage={currentPage}  handlePageChange={handlePageChange} />
+                
             </Container>
         </Layout>
     );

@@ -42,8 +42,7 @@ export default function Livro({livro}: any) {
                     </Card.Body>
                 </Col>
             </Row>
-            </Card>
-       
+        </Card>
         
     );
 }
