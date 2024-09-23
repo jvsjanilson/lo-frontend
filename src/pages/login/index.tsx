@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 const initial = {
     username: '',
     password: '',
-    empresa: ''
 }
 
 const Login: React.FC = () => {
@@ -24,7 +23,7 @@ const Login: React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        livrariaContext?.login(usuarioForm.username, usuarioForm.password);
+        livrariaContext?.login(usuarioForm.username, usuarioForm.password)
     }
 
     return (
@@ -36,10 +35,11 @@ const Login: React.FC = () => {
         >
             
             
-                {/* <Alert variant="danger" show={authContext?.showError} 
-                    onClose={() => authContext?.changeShowError(false)} dismissible>
-                    <span>{authContext?.showMessageError}</span>
-                </Alert> */}
+                <Alert variant="danger" show={livrariaContext?.showError} 
+                    onClose={() => livrariaContext?.setShowError(false)}
+                    dismissible>
+                    <span>{livrariaContext?.showMessageError}</span>
+                </Alert>
                     <Form onSubmit={handleLogin}>
                         <Card style={{borderTop: '3px solid #007bff'}}>
                             <Card.Header className="py-3 text-center fw-bold card-outline-primary">
@@ -54,45 +54,45 @@ const Login: React.FC = () => {
                                             autoFocus
                                         />
                                         
-                                         {/* {authContext?.errors.username && (
+                                         {livrariaContext?.errors.username && (
                                             <ul className="errorfield">
-                                                {authContext?.errors.username.map((error, index) => (
+                                                {livrariaContext?.errors.username.map((error, index) => (
                                                     <li key={index} className="text-danger">{error}</li>
                                                 ))}
                                             </ul>
-                                        )} */}
+                                        )}
                                     </Form.Group>
 
                                     <Form.Group className="mb-3" controlId="password">
                                         <Form.Label>Senha:</Form.Label>
                                         <Form.Control type="password" value={usuarioForm.password} 
                                             name="password"  onChange={handleChange} />
-                                        {/* {authContext?.errors.password && (
+                                        {livrariaContext?.errors.password && (
                                             <ul className="errorfield">
-                                                {authContext?.errors.password.map((error, index) => (
+                                                {livrariaContext?.errors.password.map((error, index) => (
                                                     <li key={index} className="text-danger">{error}</li>
                                                 ))}
                                             </ul>
-                                        )}                                             */}
+                                        )}                                            
                                     </Form.Group>
 
                                     
                            
                             </Card.Body>
                             <Card.Footer className="d-flex justify-content-between">
-                                <Link to="/" className="btn btn-secondary">Voltar</Link>
+                                
                                 <div className="row g-2">
                                     <div className="col">
-                                        <Button variant="primary" type="submit">
-                                            Entrar
-                                        </Button>
+                                    <Link to="/" className="btn btn-secondary">Voltar</Link>        
                                    </div>
                                    <div className="col">
-                                    <Button variant="success" type="button">
-                                            Registrar
-                                        </Button>
+                                    
+                                    <Link to="/register" className="btn btn-success">Registrar</Link>
                                    </div>
                                 </div>
+                                <Button variant="primary" type="submit">
+                                    Entrar
+                                </Button>
                                 
                             </Card.Footer>
                         </Card>

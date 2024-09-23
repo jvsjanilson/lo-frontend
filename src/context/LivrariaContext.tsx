@@ -13,13 +13,29 @@ interface LivrariaContextInterface {
     login: (username: string, password: string) => void;
     logout: () => void;
     isLogin: boolean;
+    errors: {
+        username: string[],
+        password: string[],
+        
+    };
+    showError: boolean;
+    showMessageError: string;
+    setShowError: React.Dispatch<React.SetStateAction<boolean>>;
+    
+}
+
+const initialFieldsError = {
+    username: [] as string[],
+    password: [] as string[],
     
 }
 
 export const LivrariaContext = createContext<LivrariaContextInterface | null>(null);
 
 export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-
+    const [showError, setShowError] = useState(false);
+    const [showMessageError, setShowMessageError] = useState('');
+    const [errors, setErrors] = useState(initialFieldsError);
     const [carrinho, setCarrinho] = useState<ItemInterface[]>([]);
     const [showCarrinho, setShowCarrinho] = useState(true);
     const [isLogin, setIsLogin] = useState(false);
@@ -36,6 +52,7 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
     }
 
     const login = (username: string, password: string) => {
+        setErrors(initialFieldsError);
         api.post('token/', {username, password}).then(response => {
 
             if (response.status === 200) {
@@ -43,7 +60,21 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
                 setIsLogin(true);
                 navigate('/');
             }
-        }).catch(error => {
+        }).catch(err => {
+            if (err.response.status === 400) {
+                setErrors(err.response.data)
+            }
+            else if (err.response.status === 401) {
+                setShowError(true);
+                setShowMessageError('Usuário ou senha inválidos');
+            }
+            else {
+                setShowMessageError(err.response.data.detail)
+                setShowError(true);
+            } 
+                
+
+
             setIsLogin(false);
         });
 
@@ -83,7 +114,12 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
                     handleFinalizarCompra, 
                     login,
                     isLogin,
-                    logout
+                    logout,
+                    errors,
+                    showError,
+                    showMessageError,
+                    setShowError
+
                 }
             }>
             {children}
