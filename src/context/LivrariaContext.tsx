@@ -37,12 +37,15 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
     const [showMessageError, setShowMessageError] = useState('');
     const [errors, setErrors] = useState(initialFieldsError);
     const [carrinho, setCarrinho] = useState<ItemInterface[]>([]);
-    const [showCarrinho, setShowCarrinho] = useState(true);
+    const [showCarrinho, setShowCarrinho] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const navigate = useNavigate();
 
     const hanbleRemoverLivroCarrinho = (id: number) => {
         setCarrinho(carrinho.filter(item => item.id !== id));
+        if (carrinho.length === 1) {
+            setShowCarrinho(false);
+        }
     }
 
     const logout = () => {
