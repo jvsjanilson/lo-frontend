@@ -14,12 +14,14 @@ const Layout: React.FC<{children: React.ReactNode}> = ({ children }) => {
                 </div>
                 <div>
                     {livrariaContext?.isLogin ? (
-                        // <Link to="/logout" className="btn btn-sm btn-light">SAIR</Link>
-                        <Button variant="danger" onClick={() => livrariaContext?.logout()} size='sm' className=''>SAIR</Button>
+                        <>
+                            <Button variant="primary me-2" onClick={() => alert('Historico')} size='sm' className=''>HISTORICO COMPRAS</Button>
+                            <Button variant="danger" onClick={() => livrariaContext?.logout()} size='sm' className=''>SAIR</Button>
+                        </>
                     ) : (
                         <Link to="/login" className="btn btn-sm btn-primary">ENTRAR</Link>
                     )}
-                    {/* <Link to="/login" className="btn btn-sm btn-light">Login</Link> */}
+
                 </div>
             </header>
             {children}
