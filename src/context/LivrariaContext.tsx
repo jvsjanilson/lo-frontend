@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 interface LivrariaContextInterface {
     carrinho: ItemInterface[];
     showCarrinho: boolean;
+    user: string
     handleFinalizarCompra: () => void;
     hanbleAdicionarLivroCarrinho: (livro: any) => void;
-    hanbleRemoverLivroCarrinho: (id: number) => void;
+    hanbleRemoverLivroCarrinho: (coverId: string) => void;
     login: (username: string, password: string) => void;
     logout: () => void;
     isLogin: boolean;
@@ -39,15 +40,10 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
     const [carrinho, setCarrinho] = useState<ItemInterface[]>([]);
     const [showCarrinho, setShowCarrinho] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const [user, setUser] = useState('');
     const navigate = useNavigate();
 
-    const hanbleRemoverLivroCarrinho = (id: number) => {
-        setCarrinho(carrinho.filter(item => item.id !== id));
-        if (carrinho.length === 1) {
-            setShowCarrinho(false);
-        }
-    }
-
+    //auth
     const logout = () => {
         localStorage.removeItem('token');
         setIsLogin(false);
@@ -60,6 +56,7 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
 
             if (response.status === 200) {
                 localStorage.setItem('token', response.data.token);
+                setUser(username);
                 setIsLogin(true);
                 navigate('/');
             }
@@ -75,12 +72,38 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
                 setShowMessageError(err.response.data.detail)
                 setShowError(true);
             } 
-                
-
-
             setIsLogin(false);
         });
 
+    }
+
+    // compras
+    const hanbleAdicionarLivroCarrinho = (livro: any) => {
+        setShowCarrinho(true);
+        let isbn =  typeof(livro.isbn) === 'object' ? livro.isbn.join(', ').split(',')[0] : livro.isbn
+        let subject = typeof(livro.subject) === 'object' ? livro.subject.join(', ').split(',')[0] : livro.subject;
+        let publish_date = typeof(livro.publish_date) === 'object' ? livro.publish_date.join(', ').split(',')[0] : livro.publish_date;
+        
+        const item = carrinho.find(item => item.isbn === isbn);
+        
+        if (!item) {
+            setCarrinho([...carrinho, { 
+                title: livro.title, 
+                cover_i: livro.cover_i, 
+                isbn: isbn, 
+                author_name: livro.author_name, 
+                subject: subject, 
+                publish_date: publish_date, 
+                first_sentence: livro.first_sentence 
+            }]);
+        }
+    }
+
+    const hanbleRemoverLivroCarrinho = (isbn: string) => {
+        setCarrinho(carrinho.filter(item => item.isbn !== isbn));
+        if (carrinho.length === 1) {
+            setShowCarrinho(false);
+        }
     }
 
     const handleFinalizarCompra = () => {
@@ -88,30 +111,12 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
         setShowCarrinho(false);
     }
 
-    const hanbleAdicionarLivroCarrinho = (livro: any) => {
-        
-        setShowCarrinho(true);
-
-        const item = carrinho.find(item => item.id === livro.id);
-        if (item) {
-            const newCarrinho = carrinho.map(item => {
-                if (item.id === livro.id) {
-                    return { ...item, quantidade: item.quantidade + 1, total: item.preco * (item.quantidade + 1) };
-                }
-                return item;
-            });
-            return setCarrinho(newCarrinho);
-        }
-        else {
-            setCarrinho([...carrinho, { id: livro.id, titulo: livro.titulo, capa_livro: livro.capa_livro, quantidade: 1, preco: livro.preco, total: livro.preco }]);
-        }
-    }
-
     return (
         <LivrariaContext.Provider value={
                 {
                     carrinho, 
                     showCarrinho, 
+                    user,
                     hanbleAdicionarLivroCarrinho, 
                     hanbleRemoverLivroCarrinho, 
                     handleFinalizarCompra, 

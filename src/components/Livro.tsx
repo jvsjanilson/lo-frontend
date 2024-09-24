@@ -10,26 +10,24 @@ export default function Livro({livro}: any) {
         <Card className='mb-2 shadow-sm'  >
             <Row className='g-0'>
                 <Col md>
-                <img src={livro.capa_livro}  className="img-fluid h-100 w-100 rounded-3 " alt="..." style={{ maxWidth: 'auto', padding: '5px'}}/>
+                <img 
+                    src={ livro.cover_i !== undefined ? `https://covers.openlibrary.org/b/id/${livro.cover_i}.jpg` : ''}
+                    className="img-fluid h-100 w-100 rounded-3 " alt="" style={{ maxWidth: 'auto', padding: '5px'}}/>
                 
                 </Col>
                 <Col md={11} className='border-start'>
                     <Card.Body className='ps-2 '
                     >
-                        <Card.Title>{livro.titulo}</Card.Title>
+                        <Card.Title>{livro.title}</Card.Title>
                         <Card.Subtitle className='mb-2'>
-                           <strong>Autor: </strong> {livro.autor}
+                           <strong>Autor: </strong> {livro.author_name}
                         </Card.Subtitle >
                         <Card.Subtitle className="mb-2">
-                           <strong>Categoria: </strong> {livro.categoria}
+                           <strong>Categoria: </strong> {typeof(livro.subject) === 'object' ? livro.subject.join(', ').split(',')[0] : livro.subject}
                         </Card.Subtitle>
                         <Card.Subtitle className="mb-2">
-                           <strong>Data Publicação: </strong> {formatDate(livro.data_publicacao)}
+                           <strong>Data Publicação: </strong> {typeof(livro.publish_date) === 'object' ? livro.publish_date.join(', ').split(',')[0] : livro.publish_date}
                         </Card.Subtitle>
-                        <Card.Subtitle className="mb-2">
-                            <strong>Preço: </strong> {formatMoeda(livro.preco)}
-                        </Card.Subtitle>
-
                   
                         <div className='d-flex justify-content-between align-self-end'>
                             <Link className='btn btn-success btn-sm'

@@ -15,7 +15,8 @@ const Layout: React.FC<{children: React.ReactNode}> = ({ children }) => {
                 <div>
                     {livrariaContext?.isLogin ? (
                         <>
-                            <Button variant="primary me-2" onClick={() => alert('Historico')} size='sm' className=''>HISTORICO COMPRAS</Button>
+
+                            <Link to="/historico" className="btn btn-sm btn-primary me-2">HISTORICO COMPRAS - {livrariaContext?.user.toUpperCase()}</Link>
                             <Button variant="danger" onClick={() => livrariaContext?.logout()} size='sm' className=''>SAIR</Button>
                         </>
                     ) : (
