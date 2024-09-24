@@ -4,11 +4,12 @@ import { LivroInterface } from '../../interfaces/LivroInterface';
 import Layout from '../../components/Layout';
 import Livro from '../../components/Livro';
 import { ItemInterface } from '../../interfaces/ItemInterface';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Form } from 'react-bootstrap';
 import { LivrariaContext } from '../../context/LivrariaContext';
 import Item from '../../components/Item';
 import Paginacao from '../../components/Paginacao';
 import { formatMoeda } from '../../utils/utils';
+import { InputGroup } from 'react-bootstrap';
 
 export default function Home() {
     const [livros, setLivros] = useState<LivroInterface[]>([]);
@@ -30,7 +31,7 @@ export default function Home() {
 
         fetchData();
         
-    }, [search]);
+    }, []);
 
     const changePage = (response: any, page: string | null = null) => {
         setNext(response?.next?.split('?')[1]);
@@ -53,9 +54,20 @@ export default function Home() {
             <Container fluid>
                 <Row className='my-4' >
                     <Col md={8}>
-                        <input type="search" className="form-control" placeholder="Pesquisar" 
-                            value={search} onChange={(e) => setSearch(e.target.value)}
-                        />
+                        
+                       <InputGroup>
+                            <select name="" id="" className='form-select' style={{maxWidth: '11rem'}}>
+                                <option value="q">Tudo</option>
+                                <option selected value="title">Nome do livro</option>
+                                <option value="author_name">Nome do autor</option>
+                                <option value="subject">Categoria</option>
+                            </select>
+                            <input type="search" className="form-control" placeholder="Pesquisar" 
+                                value={search} onChange={(e) => setSearch(e.target.value)}
+                                />
+                            <Button variant='primary' onClick={() => fetchData()} >Pesquisar</Button>
+                        </InputGroup>
+                        
                     </Col>
                     
                 </Row>
