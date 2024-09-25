@@ -3,6 +3,7 @@ import { Card, Container } from "react-bootstrap";
 import { CompraInterface } from "../../interfaces/CompraInterface";
 import Item from "../../components/Item";
 import livroService from "../../services/LivroService";
+import { Link } from "react-router-dom";
 
 export default function Historico() {
     const [compras, setCompras] = useState<CompraInterface[]>([]);
@@ -15,6 +16,10 @@ export default function Historico() {
 
     return (
         <Container  className="mt-4">
+            <div className="d-flex justify-content-end mb-3">
+                <Link to="/" className="btn btn-sm btn-primary">VOLTAR</Link>
+            </div>
+
             
             {compras.map((compra) =>  {
                 return (
