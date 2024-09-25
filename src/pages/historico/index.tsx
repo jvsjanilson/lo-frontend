@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 import { CompraInterface } from "../../interfaces/CompraInterface";
-
+import Item from "../../components/Item";
 import livroService from "../../services/LivroService";
 
 export default function Historico() {
@@ -9,15 +9,31 @@ export default function Historico() {
     useEffect(() => {
         livroService.getCompras().then((response) => {
             console.log(response)
+            setCompras(response.results);
         });
     }, []);
 
-
-
     return (
         <Container  className="mt-4">
-            <h1>Historico de compras</h1>
+            
+            {compras.map((compra) =>  {
+                return (
+                    <div key={compra.id}>
+                        <Card className='mb-2 shadow-sm'  >
+                            <Card.Header>Compra realizada em: <strong>{compra.created_at}</strong> - Total de items: <strong>{compra.items.map(item => item.quantity).reduce((acc, q) => (acc+q) ) }</strong></Card.Header>
+                            <Card.Body>
+                                {compra.items.map((item) => {
+                                    return (
+                                        <Item livro={item} />
+                                    )
+                                })}
+                            </Card.Body>
+                        </Card>
+                       
+                    </div>
+                )
+
+            })}
         </Container>
-        
     );
 }
