@@ -1,8 +1,9 @@
-import api from "../utils/api"
+import axios from "axios";
+import { BASE_URL } from "../utils/api";
 
 class UserServce {
     async createUser(user: any) {
-        return await api.post("/register/", user).then(response => response.data);
+        return await axios.post(BASE_URL+"register/", user).then(response => response.data);
     }
 }
 
