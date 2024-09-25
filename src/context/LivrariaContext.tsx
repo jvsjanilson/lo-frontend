@@ -1,6 +1,7 @@
 import React, {createContext, useState, useEffect} from "react";
 import { ItemInterface } from "../interfaces/ItemInterface";
-import api from "../utils/api";
+import axios from "axios";
+import { BASE_URL } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
 
@@ -62,15 +63,15 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
 
     const login = (username: string, password: string) => {
         setErrors(initialFieldsError);
-        api.post('token/', {username, password}).then(response => {
-
+        axios.post(BASE_URL +'token/', {username, password}).then(response => {
             if (response.status === 200) {
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('token', JSON.stringify(response.data));
                 setUser(username);
                 setIsLogin(true);
                 navigate('/');
             }
         }).catch(err => {
+            
             if (err.response.status === 400) {
                 setErrors(err.response.data)
             }

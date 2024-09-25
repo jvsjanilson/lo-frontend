@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "../utils/api";
 
 class LivroService {
     // async getLivros(search: string, page: string | null) {
@@ -14,13 +15,18 @@ class LivroService {
     // }
 
     async getLivros(search: string, field: string | null, page: string = '1') {
-        console.log('search ',search)
+        
         let query = field ? `${field}:${search}` : `${search}`;
         const response = 
             await axios(`https://openlibrary.org/search.json?q=${query}&fields=*&language:por$&limit=3&page=${page}`)
                 .then((response) => response.data );    
         return response;
       }
+
+    async getCompras() {
+        return await api.get('compras/').then(r => r.data);
+    }
+
 
 }
 

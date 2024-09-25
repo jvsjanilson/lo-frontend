@@ -12,16 +12,16 @@ const api = axios.create({
     },
 });
 
-// api.interceptors.request.use(
-//     async config => {
-//         const token = localStorage.getItem('token');
+api.interceptors.request.use(
+    async config => {
+        const token = localStorage.getItem('token');
         
-//         if (token) {
-//             config.headers.Authorization = `Bearer ${JSON.parse(token).access}`;
-//         }
-//         return config;
-//     }
-// );
+        if (token) {
+            config.headers.Authorization = `Bearer ${JSON.parse(token).access}`;
+        }
+        return config;
+    }
+);
 
 // api.interceptors.response.use(
 //     response => response,
