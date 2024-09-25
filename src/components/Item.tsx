@@ -21,6 +21,7 @@ export default function Item({livro}: any) {
                     >
                         <Card.Subtitle className="mb-3">{livro.title}</Card.Subtitle>
                         <Card.Subtitle className="mb-3">Autor: {livro.author_name}</Card.Subtitle>
+                        <Card.Subtitle className="mb-3">Qtd.: {livro.quantity}</Card.Subtitle>
                         {!livro.id && <Button variant="danger" onClick={() => livrariaContext?.hanbleRemoverLivroCarrinho(livro.isbn)} size='sm' className=''>Remover</Button>}
                         
                         

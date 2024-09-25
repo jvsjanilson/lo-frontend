@@ -95,7 +95,7 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
         let publish_date = typeof(livro.publish_date) === 'object' ? livro.publish_date.join(', ').split(',')[0] : livro.publish_date;
         
         const item = carrinho.find(item => item.isbn === isbn);
-        
+
         if (!item) {
             setCarrinho([...carrinho, { 
                 title: livro.title, 
@@ -104,10 +104,21 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
                 author_name: livro.author_name, 
                 subject: subject, 
                 publish_date: publish_date, 
-                first_sentence: livro.first_sentence 
+                first_sentence: livro.first_sentence,
+                quantity: 1 
             }]);
             localStorage.setItem('carrinho', JSON.stringify(carrinho));
+        } else {
+            const newCarrinho = carrinho.map(item => {
+                if (item.isbn === isbn) {
+                    return { ...item, quantity: item.quantity + 1 };
+                }
+                return item;
+            });
+            localStorage.setItem('carrinho', JSON.stringify(newCarrinho));
+            return setCarrinho(newCarrinho);
         }
+
     }
 
     const hanbleRemoverLivroCarrinho = (isbn: string) => {

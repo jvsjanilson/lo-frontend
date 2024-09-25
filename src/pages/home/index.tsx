@@ -16,8 +16,8 @@ export default function Home() {
     const [next, setNext] = useState<string | null>(null)
     const [previous, setPrevious] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [search, setSearch] = useState('');
-    const [tipoBusta, setTipoBusca] = useState('title');
+    const [search, setSearch] = useState('Isaac Asimov');
+    const [tipoBusta, setTipoBusca] = useState('author_name');
     const livrariaContext = useContext(LivrariaContext);
     
     

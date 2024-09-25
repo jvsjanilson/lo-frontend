@@ -6,5 +6,6 @@ export interface ItemInterface {
     subject: string;
     publish_date: string;
     first_sentence: string;
+    quantity: number;
     
 }
