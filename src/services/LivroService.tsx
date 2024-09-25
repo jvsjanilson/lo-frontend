@@ -23,8 +23,19 @@ class LivroService {
         return response;
       }
 
-    async getCompras() {
-        return await api.get('compras/').then(r => r.data);
+    async getCompras(page: string  = '') {
+        console.log(page)
+        if (page !== '') {
+            return await api.get(`compras/?${page}`).then(r => r.data);
+        } else {
+            return await api.get('compras/').then(r => r.data);
+        }
+    }
+
+    async finalizarCompra(carrinho: any) {
+        const data = {"items_create": carrinho}
+        console.log(data)
+        return await api.post('compras/', data).then(r => r.data);
     }
 
 

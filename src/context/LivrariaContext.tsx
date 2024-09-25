@@ -3,6 +3,7 @@ import { ItemInterface } from "../interfaces/ItemInterface";
 import axios from "axios";
 import { BASE_URL } from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import livroService from "../services/LivroService";
 
 
 interface LivrariaContextInterface {
@@ -94,21 +95,34 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
         let isbn =  typeof(livro.isbn) === 'object' ? livro.isbn.join(', ').split(',')[0] : livro.isbn
         let subject = typeof(livro.subject) === 'object' ? livro.subject.join(', ').split(',')[0] : livro.subject;
         let publish_date = typeof(livro.publish_date) === 'object' ? livro.publish_date.join(', ').split(',')[0] : livro.publish_date;
+        let author_name = typeof(livro.author_name) === 'object' ? livro.author_name.join(', ').split(',')[0] : livro.author_name;
+        let first_sentence = typeof(livro.first_sentence) === 'object' ? livro.first_sentence.join(', ').split(',')[0] : livro.first_sentence;
         
         const item = carrinho.find(item => item.isbn === isbn);
 
         if (!item) {
-            setCarrinho([...carrinho, { 
+            
+                setCarrinho([...carrinho, { 
+                    title: livro.title, 
+                    cover_i: livro.cover_i, 
+                    isbn: isbn, 
+                    author_name: author_name, 
+                    subject: subject, 
+                    publish_date: publish_date, 
+                    first_sentence: first_sentence,
+                    quantity: 1 
+                }]);
+            
+            localStorage.setItem('carrinho', JSON.stringify([...carrinho, { 
                 title: livro.title, 
                 cover_i: livro.cover_i, 
                 isbn: isbn, 
-                author_name: livro.author_name, 
+                author_name: author_name, 
                 subject: subject, 
                 publish_date: publish_date, 
-                first_sentence: livro.first_sentence,
+                first_sentence: first_sentence,
                 quantity: 1 
-            }]);
-            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            } ]));
         } else {
             const newCarrinho = carrinho.map(item => {
                 if (item.isbn === isbn) {
@@ -123,16 +137,25 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
     }
 
     const hanbleRemoverLivroCarrinho = (isbn: string) => {
+        localStorage.removeItem('carrinho');
         setCarrinho(carrinho.filter(item => item.isbn !== isbn));
         if (carrinho.length === 1) {
             setShowCarrinho(false);
         }
+
     }
 
     const handleFinalizarCompra = () => {
-        setCarrinho([]);
-       // setShowCarrinho(false);
+
+       livroService.finalizarCompra(carrinho).then(response => {
         localStorage.removeItem('carrinho');
+        setShowCarrinho(false);
+        setCarrinho([]);
+        }).catch(err => {
+            console.log(err);
+            setShowError(true);
+            setShowMessageError(err.response.data.detail);
+        });
     }
 
     return (

@@ -5,4 +5,5 @@ export interface CompraInterface {
     user: string;
     items : ItemInterface[];
     created_at: string;
+    total_items: number;
 }

@@ -1,65 +1,51 @@
 import { useState, useEffect, useContext } from 'react';
 import livroService from '../../services/LivroService';
-import { LivroInterface } from '../../interfaces/LivroInterface';
 import Layout from '../../components/Layout';
 import Livro from '../../components/Livro';
 import { ItemInterface } from '../../interfaces/ItemInterface';
-import { Button, Card, Col, Container, Row, Form } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { LivrariaContext } from '../../context/LivrariaContext';
 import Item from '../../components/Item';
-import Paginacao from '../../components/Paginacao';
 import { InputGroup } from 'react-bootstrap';
 
 
 export default function Home() {
     const [livros, setLivros] = useState([]);
-    const [next, setNext] = useState<string | null>(null)
-    const [previous, setPrevious] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [search, setSearch] = useState('Isaac Asimov');
-    const [tipoBusta, setTipoBusca] = useState('author_name');
+    const [search, setSearch] = useState('');
+    const [tipoBusta, setTipoBusca] = useState('title');
     const livrariaContext = useContext(LivrariaContext);
-    
+    const [showSpinner, setShowSpinner] = useState(true);
     
     async function fetchData(page: string | null = null) {
+        setShowSpinner(true);
         if (search?.length > 0) {
-            livroService.getLivros(search, tipoBusta).then(response => {
+         
+            await livroService.getLivros(search, tipoBusta).then(response => {
                 setLivros(response.docs);
+                setShowSpinner(false);
+            }).catch((error) => {
+                setShowSpinner(false);
             });
         } else  {
             setLivros([]);
+            setShowSpinner(false);
         }
     }
      
-    const changePage = (response: any, page: string | null = null) => {
-        setNext(response?.next?.split('?')[1]);
-        setPrevious(response?.previous?.split('?')[1]);
-        if (!response?.previous?.split('?')[1]) {
-            if (response?.previous) {
-                setPrevious('page=1');
-            }
-        }
-        setCurrentPage(page?.includes('page=') ? parseInt(page.split('page=')[1]) : 1);
-    }
-
     const handleInputEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             fetchData();
         }
     }
-
-    const handlePageChange = (page: string | null = null) => {
-        fetchData(page)
-    }
-
+  
     useEffect(() => {
         fetchData();
     }, [])
 
-
     return (
         <Layout>
             <Container fluid>
+                {/* formulario de busca do livro */}
                 <Row className='my-4' >
                     <Col md={8}>
                         
@@ -81,17 +67,22 @@ export default function Home() {
                         </InputGroup>
                         
                     </Col>
-                    
+                    <Col  style={{ float: 'right' }} >
+                        <Spinner style={{ float: 'right' }} variant="success" hidden={!showSpinner} 
+                            animation="border" role="status"/>
+                    </Col>
                 </Row>
                 <Row className='g-2'>
                     <Col md>
+                        {/* Listagem de livros da pesquisa */}
                         {livros.map((livro, i) => (
                             <Livro key={i} livro={livro}  />
                         ))}
-                    <Paginacao next={next} previous={previous} currentPage={currentPage}  handlePageChange={handlePageChange} />
                     </Col>
+                    {/* carrinho de compras */}
                     {livrariaContext?.showCarrinho && (
                         <Col md={4}>
+                            {livrariaContext?.showError && (<span>{livrariaContext?.showMessageError} ola</span>)}
                             <Card className='mb-2 shadow-sm'  >
                             <Card.Header>
                                 <div className='d-flex justify-content-between align-items-center'>

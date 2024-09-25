@@ -2,10 +2,10 @@ import React, {useContext} from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { LivrariaContext } from '../context/LivrariaContext';
 import { Link } from 'react-router-dom';
-import { formatDate, formatMoeda } from '../utils/utils';
 
 export default function Livro({livro}: any) {
     const context  = useContext(LivrariaContext);
+    
     return (    
         <Card className='mb-2 shadow-sm'  >
             <Row className='g-0'>

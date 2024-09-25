@@ -7,13 +7,9 @@ export default function Detalhe() {
 
     return (
         <Container className="mt-4">
-            
             <Card>
-                {/* <Card.Header></Card.Header> */}
                 <Card.Body>
                     <Card.Title className="border-bottom pb-2">{livro.title}</Card.Title>
-
-
                     <Row className='g-3'>
                         <Col md>
                             <Card.Img variant="top"  src={ livro.cover_i !== undefined ? `https://covers.openlibrary.org/b/id/${livro.cover_i}.jpg` : ''} />
@@ -32,6 +28,12 @@ export default function Detalhe() {
                                 <strong>Data Publicação: </strong>{typeof(livro.publish_date) === 'object' ? livro.publish_date.join(', ').split(',')[0] : livro.publish_date}
                             </Card.Text>
 
+                            <Card.Text>
+                                <strong>Número de páginas: </strong>{livro.number_of_pages_median}
+                            </Card.Text>
+                            <Card.Text>
+                                <strong>Número de páginas: </strong>{livro.first_sentence}
+                            </Card.Text>
 
                             <Card.Text>
                                 <strong>Sinopse: </strong>
@@ -41,9 +43,7 @@ export default function Detalhe() {
                             <Link to="/" className="btn  btn-secondary">Voltar</Link>
                         </Col>
                     </Row>
-                    
-                 
-                    
+                   
                 </Card.Body>
             </Card>
             
