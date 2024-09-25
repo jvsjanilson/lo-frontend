@@ -6,7 +6,6 @@ class UserServce {
     }
 }
 
-
 const userService = new UserServce()
 
 export default userService;

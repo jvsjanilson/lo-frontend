@@ -2,7 +2,6 @@ import axios from "axios";
 
 const port: number = 80;
 
-//export const BASE_URL = `https://janilsonjvs.pythonanywhere.com${port !== 80 ? ':'+port.toString() : ''}/api/`;
 export const BASE_URL = `http://localhost:${port}/api/`;
 
 const api = axios.create({
@@ -22,16 +21,5 @@ api.interceptors.request.use(
         return config;
     }
 );
-
-// api.interceptors.response.use(
-//     response => response,
-//     async (error) => {
-//         if (error.response.status === 401) {
-//             localStorage.removeItem('token');
-//             window.location.href = '/login';
-//         }
-//         return Promise.reject(error);
-//     }
-// );
 
 export default api;
