@@ -1,4 +1,4 @@
-import React, {createContext, useState} from "react";
+import React, {createContext, useState, useEffect} from "react";
 import { ItemInterface } from "../interfaces/ItemInterface";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,16 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
     const [isLogin, setIsLogin] = useState(false);
     const [user, setUser] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const car = localStorage.getItem('carrinho');
+        
+        if (car) {
+            setCarrinho(JSON.parse(car));
+        }
+        setShowCarrinho(car ? true : false);
+    }, [])
+
 
     //auth
     const logout = () => {
@@ -96,6 +106,7 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
                 publish_date: publish_date, 
                 first_sentence: livro.first_sentence 
             }]);
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
         }
     }
 
@@ -108,7 +119,8 @@ export const LivrariaProvider: React.FC<{children: React.ReactNode}> = ({ childr
 
     const handleFinalizarCompra = () => {
         setCarrinho([]);
-        setShowCarrinho(false);
+       // setShowCarrinho(false);
+        localStorage.removeItem('carrinho');
     }
 
     return (

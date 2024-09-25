@@ -102,7 +102,7 @@ export default function Home() {
                                     </div>
                                     <div>
                                     {(livrariaContext.carrinho.length > 0 && livrariaContext?.isLogin) &&    (
-                                        <Button variant="success" onClick={() => {}} size='sm' className=''>Finalizar Compra </Button>
+                                        <Button variant="success" onClick={() => livrariaContext.handleFinalizarCompra()} size='sm' className=''>Finalizar Compra </Button>
                                     )}
                                     </div>
                                 </div>
