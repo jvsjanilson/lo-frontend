@@ -1,5 +1,4 @@
-import { Form, Button, Container, Card, Alert, Row, Col } from "react-bootstrap";
-import api from "../../utils/api";
+import { Form, Button, Container, Card, Row, Col } from "react-bootstrap";
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import userService from "../../services/UserService";

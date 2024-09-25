@@ -5,6 +5,7 @@ import Home from "../pages/home";
 import Detalhe from "../pages/livro/detalhe";
 import Login from "../pages/login";
 import Register from "../pages/register"
+import Historico from "../pages/historico";
 
 export default function Rotas() {
     return (
@@ -15,6 +16,7 @@ export default function Rotas() {
                     <Route path="/livro/detalhe" element={<Detalhe/>} />
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<Register/>} />
+                    <Route path="/historico" element={<Historico/>} />
                 </Routes>
             </LivrariaProvider>
         </Router>
